@@ -1,10 +1,22 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import * as React from 'react';
+import { SafeAreaView } from 'react-native';
+import { Searchbar } from 'react-native-paper';
 
-export default function ProductCard() {
+const MyComponent = () => {
+    const [searchQuery, setSearchQuery] = React.useState('');
+
+    const onChangeSearch = query => setSearchQuery(query);
+
     return (
-        <View>
-            <Text>ProductCard</Text>
-        </View>
-    )
-}
+        <SafeAreaView>
+            <Searchbar
+                style={{ backgroundColor: '#D0BFFF' }}
+                placeholder="Ara"
+                onChangeText={onChangeSearch}
+                value={searchQuery}
+            /></SafeAreaView>
+
+    );
+};
+
+export default MyComponent;
