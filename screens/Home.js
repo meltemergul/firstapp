@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Button, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Button, Modal, SafeAreaView, ImageBackground } from 'react-native';
 import { Chip } from 'react-native-paper'
 
 const initialPosts = [
     {
         id: '1',
         title: 'En Popüler 10 Programlama Dili',
-        content: 'Yeni eklenen dillerle.. ',
+        content: 'Bugünün teknoloji çağında, bilgisayar programcılığı, sadece birkaç kişinin sahip olduğu özel bir yetenek değil, birçok BT işinde gereken bir beceridir.',
         image: require('../images/code.jpg'), // Resmin yolu
     },
     {
@@ -33,12 +33,12 @@ const App = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Text style={styles.header}>MBlog </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <Chip icon={(require('../images/heart.png'))} style={{ width: 120, margin: 5 }}>Favorilerim</Chip>
-                <Chip icon={(require('../images/clock.png'))} style={{ width: 90, margin: 5 }}>Yeniler</Chip>
-                <Chip icon={(require('../images/star.png'))} style={{ width: 90, margin: 5 }}>Popüler</Chip>
+                <Chip icon={(require('../images/heart.png'))} style={{ width: 130, margin: 5, }}>Favorilerim</Chip>
+                <Chip icon={(require('../images/clock.png'))} style={{ width: 100, margin: 5 }}>Yeniler</Chip>
+                <Chip icon={(require('../images/star.png'))} style={{ width: 100, margin: 5 }}>Popüler</Chip>
             </View>
             <ScrollView style={styles.postList}>
                 {posts.map((post) => (
@@ -58,14 +58,15 @@ const App = () => {
                 transparent={false}
                 visible={selectedPost !== null}
             >
-                <View style={styles.selectedPostModal}>
-                    <Button title="Kapat" onPress={closePost} />
+                <SafeAreaView style={styles.selectedPostModal}>
                     <Text style={styles.selectedPostTitle}>{selectedPost?.title}</Text>
                     <Image source={selectedPost?.image} style={styles.selectedPostImage} />
                     <Text style={styles.selectedPostContent}>{selectedPost?.content}</Text>
-                </View>
+                    <Button title="Kapat" onPress={closePost} />
+                </SafeAreaView>
             </Modal>
-        </View>
+
+        </SafeAreaView>
     );
 };
 
@@ -74,17 +75,21 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 15,
         paddingBottom: 0,
-        backgroundColor: '#fff',
+        backgroundColor: '#EEEDED',
+
     },
     header: {
-        fontSize: 24,
+        fontSize: 40,
         fontWeight: 'bold',
         marginBottom: 10,
         color: '#504099',
+        marginLeft: 40,
 
     },
     postList: {
         marginBottom: 20,
+
+
     },
     postItem: {
         padding: 10,
@@ -92,19 +97,23 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ddd',
     },
     postImage: {
-        width: '100%',
+        width: '90%',
         height: 150,
         resizeMode: 'cover',
         marginBottom: 10,
         borderRadius: 10,
+        justifyContent: 'center',
+        alignSelf: 'center'
     },
     postTitle: {
         fontSize: 16,
+        marginLeft: 25,
         fontWeight: 'bold',
     },
     postDescription: {
         fontSize: 14,
         color: '#888',
+        marginLeft: 25,
     },
     selectedPostModal: {
         backgroundColor: '#f9f9f9',
@@ -112,21 +121,26 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ddd',
         height: '90%',
+
     },
     selectedPostTitle: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 10,
+        alignSelf: 'center',
     },
     selectedPostImage: {
-        width: '100%',
+        width: '90%',
         height: 200,
         borderRadius: 10,
         resizeMode: 'cover',
         marginBottom: 10,
+        alignSelf: 'center',
     },
     selectedPostContent: {
         fontSize: 16,
+        width: '90%',
+        alignSelf: 'center'
     },
 });
 

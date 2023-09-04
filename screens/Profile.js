@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Button, Modal, TextInput } from 'react-native';
 import Yazılar from './Yazılar';
+import { SafeAreaView } from 'react-native-safe-area-context';
 const initialPosts = [
     {
         id: '1',
@@ -40,7 +41,7 @@ const App = () => {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Text style={styles.headerB}>MBlog </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
                 <Text style={styles.header}>Yazılarım</Text>
@@ -74,15 +75,15 @@ const App = () => {
             </Modal>
 
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle} c>
-
-                <Yazılar></Yazılar>
                 <View style={styles.closeButton}>
-                    <Text onPress={() => setVisible(false)}>Kapat</Text>
+                    <Text onPress={() => setVisible(false)} style={{ fontWeight: 'bold' }}>Kapat</Text>
                 </View>
+                <Yazılar></Yazılar>
+
             </Modal>
 
 
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -91,12 +92,13 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 15,
         paddingBottom: 0,
-        backgroundColor: '#fff',
+        backgroundColor: '#EEEDED',
     },
     header: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10,
+        marginLeft: 25,
     },
     ekle: {
         fontSize: 18,
@@ -112,33 +114,40 @@ const styles = StyleSheet.create({
         height: 35,
     },
     headerB: {
-        fontSize: 24,
+        fontSize: 40,
         fontWeight: 'bold',
-        marginTop: 10,
         color: '#504099',
+        marginLeft: 25,
+
+
     },
     postList: {
         marginBottom: 20,
+
     },
     postItem: {
         padding: 10,
-        borderBottomWidth: 1,
+        borderBottomWidth: 2,
         borderBottomColor: '#ddd',
     },
     postImage: {
-        width: '100%',
+        width: '95%',
         height: 150,
         resizeMode: 'cover',
         marginBottom: 10,
         borderRadius: 10,
+        justifyContent: 'center',
+        alignSelf: 'center'
     },
     postTitle: {
         fontSize: 16,
         fontWeight: 'bold',
+        marginLeft: 25,
     },
     postDescription: {
         fontSize: 14,
-        color: '#888',
+        color: 'gray',
+        marginLeft: 25,
     },
     selectedPostModal: {
         backgroundColor: '#f9f9f9',

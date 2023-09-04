@@ -1,5 +1,5 @@
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Image, StyleSheet, Text, TouchableOpacity, SafeAreaView, ImageBackground } from 'react-native'
+import React, { useState } from 'react'
 import { TextInput } from 'react-native-paper';
 import Navigation from './Navigation';
 import { useNavigation } from '@react-navigation/native';
@@ -11,7 +11,9 @@ export default function Login() {
     const label = <Text color='white'>{label}</Text>
     return (
 
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
+
+
             <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 80, }}>
                 <Image source={require('../images/tuenti-app-logo.png')} style={{ width: 120, height: 120 }} />
                 <Text style={styles.headerB}>MBlog </Text>
@@ -20,8 +22,8 @@ export default function Login() {
                 <Text style={styles.welcome}>Welcome!</Text>
             </View>
             <TextInput style={styles.input}
-                label="Username "
-                backgroundColor="#9F91CC"
+                label="Username"
+                backgroundColor="#9c80d9"
                 textColor='white'
                 underlineColor='white'
                 selectionColor='white'
@@ -30,18 +32,23 @@ export default function Login() {
             />
             <TextInput style={styles.input}
                 label="Password"
-                backgroundColor="#9F91CC"
+                backgroundColor="#9c80d9"
                 textColor='white'
                 underlineColor='white'
                 color='white'
                 cursorColor='white'
             />
-            <TouchableOpacity style={styles.login} onPress={() => { navigation.navigate('Home') }}><Text style={{
+            <TouchableOpacity style={styles.login} onPress={() => { navigation.navigate('Navigation') }}><Text style={{
+                color: '#504099',
+                fontSize: 18,
+            }}>Log In</Text></TouchableOpacity>
+            <Text style={styles.link}>Forgot password?</Text>
+            <TouchableOpacity style={styles.create} ><Text style={{
                 color: '#504099',
                 fontSize: 18
-            }}>Log In</Text></TouchableOpacity>
+            }}>Create</Text></TouchableOpacity>
 
-        </View>
+        </SafeAreaView>
 
     )
 }
@@ -51,7 +58,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 15,
         paddingBottom: 0,
-        backgroundColor: '#9F91CC',
+        backgroundColor: '#9c80d9',
     },
     headerB: {
         fontSize: 24,
@@ -59,11 +66,18 @@ const styles = StyleSheet.create({
         marginTop: 10,
         color: 'white',
     },
+    link: {
+        fontSize: 14,
+        marginTop: 10,
+        color: 'white',
+        alignItems: 'center',
+        alignSelf: 'center'
+    },
     welcome: {
         color: 'white',
         fontSize: 34,
         fontWeight: 'bold',
-        marginTop: 30,
+        marginTop: 60,
     },
     input: {
         margin: 5,
@@ -71,7 +85,7 @@ const styles = StyleSheet.create({
 
     },
     login: {
-        marginTop: 30,
+        marginTop: 50,
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
@@ -79,7 +93,20 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         borderRadius: 30,
         height: 50,
-        elevation: 30,
-        width: '80%',
+        elevation: 10,
+        width: '90%',
+    },
+    create: {
+        marginTop: 190,
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        alignItems: 'center',
+        alignContent: 'center',
+        alignSelf: 'center',
+        borderRadius: 30,
+        height: 50,
+        elevation: 10,
+        width: '40%',
+
     }
 });

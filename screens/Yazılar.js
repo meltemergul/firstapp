@@ -1,11 +1,25 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import SQLite from 'react-native-sqlite-storage';
+
 
 const App = () => {
+    const db = SQLite.openDatabase({ name: 'mydatabase.db', location: 'default' });
+
     const [posts, setPosts] = useState([]);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [editIndex, setEditIndex] = useState(-1);
+    db.transaction((tx) => {
+        tx.executeSql(
+            'CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT)',
+            [],
+            () => console.log('Tablo başarıyla oluşturuldu.'),
+            (error) => console.error('Tablo oluşturma hatası:', error)
+        );
+    });
+
 
     const addPost = () => {
         if (editIndex !== -1) {
@@ -16,7 +30,17 @@ const App = () => {
             setEditIndex(-1);
         } else {
             // Yeni gönderi ekleme
-            setPosts([...posts, { title, content }]);
+            db.transaction((tx) => {
+                tx.executeSql(
+                    'INSERT INTO posts (title, content) VALUES (?, ?)',
+                    [title, content],
+                    () => console.log('Yazı başarıyla eklendi.'),
+                    (error) => console.error('Yazı ekleme hatası:', error)
+                );
+            });
+
+            // Verileri yenile
+            fetchPostsFromDatabase();
         }
 
         // Temizleme
@@ -24,19 +48,51 @@ const App = () => {
         setContent('');
     };
 
+
+    const fetchPostsFromDatabase = () => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                'SELECT * FROM posts',
+                [],
+                (_, { rows }) => {
+                    const postsFromDatabase = [];
+                    for (let i = 0; i < rows.length; i++) {
+                        postsFromDatabase.push(rows.item(i));
+                    }
+                    setPosts(postsFromDatabase);
+                },
+                (error) => console.error('Veri alma hatası:', error)
+            );
+        });
+    };
+
+    // editPost işlevi
     const editPost = (index) => {
         setTitle(posts[index].title);
         setContent(posts[index].content);
         setEditIndex(index);
     };
 
+    // deletePost işlevi
     const deletePost = (index) => {
-        const updatedPosts = posts.filter((_, i) => i !== index);
+        const updatedPosts = [...posts];
+        updatedPosts.splice(index, 1);
         setPosts(updatedPosts);
+
+        // Veritabanından da silme işlemi yapılmalı
+        db.transaction((tx) => {
+            tx.executeSql(
+                'DELETE FROM posts WHERE id = ?',
+                [posts[index].id],
+                () => console.log('Yazı başarıyla silindi.'),
+                (error) => console.error('Yazı silme hatası:', error)
+            );
+        });
     };
 
+
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Text style={styles.headerB}>MBlog </Text>
             <Text style={styles.header}>Yazı Ekle</Text>
             <TextInput
@@ -61,7 +117,7 @@ const App = () => {
                     <Button color={'#504099'} title="Sil" onPress={() => deletePost(index)} />
                 </View>
             ))}
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -69,7 +125,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 15,
-        paddingBottom: 0,
         backgroundColor: '#fff',
     },
     header: {
