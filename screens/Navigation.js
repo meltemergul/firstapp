@@ -1,40 +1,42 @@
 import React from 'react';
-import { View, Text, SafeAreaView, Image } from 'react-native';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { View, Text, SafeAreaView, Image, StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { Appbar, useTheme } from 'react-native-paper';
 import Home from './Home'
 import Profile from './Profile';
-import Yazılar from './Yazılar';
 import Ayarlar from './Settings';
 import Search from './Search';
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function Navigation() {
     return (
 
         <Tab.Navigator
             initialRouteName="Home"
-            activeColor="#504099"
-            inactiveColor="#504099"
-            barStyle={{ backgroundColor: 'white', color: 'red' }}
+            tabBaraActiveColor='silver'
+            tabBarInactiveTintColor='silver'
+            tintColor='black'
+            screenOptions={{
+                tabBarStyle: { backgroundColor: 'white', paddingBottom: 10, height: 60, color: 'silver', marginBottom: 10 },
+                headerShown: false
+            }}
         >
             <Tab.Screen
                 name="Home"
                 component={Home}
                 options={({ route }) => ({
                     tabBarLabel: 'Ana Sayfa',
-                    tabBarIcon: ({ color }) => (
+                    tabBarIcon: ({ color, focused }) => (
                         <Image
-                            source={
-                                route.name === 'Home'
-                                    ? require("../images/home-active2.png")
-                                    : require('../images/home.png')
-                            }
-                            style={{ width: 24, height: 24 }}
+                            source={require('../images/homes.png')}
+                            style={{ width: 24, height: 24, tintColor: focused ? '#504099' : color }}
                         />
                     ),
+                    tabBarLabelStyle: {
+                        color: '#504099', // Change label text color when active
+                    },
                 })}
             />
             <Tab.Screen
@@ -42,16 +44,16 @@ export default function Navigation() {
                 component={Search}
                 options={({ route }) => ({
                     tabBarLabel: 'Ara',
-                    tabBarIcon: ({ color }) => (
+                    tabBarIcon: ({ color, focused }) => (
                         <Image
-                            source={
-                                route.name === 'Search'
-                                    ? require("../images/search.png")
-                                    : require('../images/shopping-cart.png')
+                            source={require('../images/glass.png')
                             }
-                            style={{ width: 24, height: 24 }}
+                            style={{ width: 24, height: 24, tintColor: focused ? '#504099' : color }}
                         />
                     ),
+                    tabBarLabelStyle: {
+                        color: route.name === 'Search' ? '#504099' : 'color', // Change label text color when active
+                    },
                 })}
             />
             <Tab.Screen
@@ -59,16 +61,16 @@ export default function Navigation() {
                 component={Profile}
                 options={({ route }) => ({
                     tabBarLabel: 'Blog',
-                    tabBarIcon: ({ color }) => (
+                    tabBarIcon: ({ color, focused }) => (
                         <Image
-                            source={
-                                route.name === 'Profile'
-                                    ? require("../images/star-2.png")
-                                    : require('../images/star-2.png')
+                            source={require('../images/star.png')
                             }
-                            style={{ width: 24, height: 24 }}
+                            style={{ width: 24, height: 24, tintColor: focused ? '#504099' : color }}
                         />
                     ),
+                    tabBarLabelStyle: {
+                        color: route.name === 'Profile' ? '#504099' : 'color', // Change label text color when active
+                    },
                 })}
             />
             <Tab.Screen
@@ -76,21 +78,28 @@ export default function Navigation() {
                 component={Ayarlar}
                 options={({ route }) => ({
                     tabBarLabel: 'Ayarlar',
-                    tabBarIcon: ({ color }) => (
+                    tabBarIcon: ({ color, focused }) => (
                         <Image
-                            source={
-                                route.name === 'Ayarlar'
-                                    ? require("../images/settings-2.png")
-                                    : require('../images/settings-2.png')
+                            source={require('../images/settings.png')
                             }
-                            style={{ width: 24, height: 24 }}
+                            style={{ width: 24, height: 24, tintColor: focused ? '#504099' : color }}
                         />
                     ),
+                    tabBarLabelStyle: {
+                        color: route.name === 'Ayarlar' ? '#504099' : 'color', // Change label text color when active
+                    },
                 })}
             />
 
-        </Tab.Navigator>
+        </Tab.Navigator >
 
 
     );
 }
+const styles = StyleSheet.create({
+
+    tabBar: {
+        height: 40,
+        backgroundColor: 'white',
+    },
+})

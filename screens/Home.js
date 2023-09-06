@@ -1,59 +1,68 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Button, Modal, SafeAreaView, ImageBackground } from 'react-native';
+import { FlatList, RefreshControl, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper'
+import SQLite from 'react-native-sqlite-storage';
+import { useNavigation } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-const initialPosts = [
-    {
-        id: '1',
-        title: 'En Popüler 10 Programlama Dili',
-        content: 'Bugünün teknoloji çağında, bilgisayar programcılığı, sadece birkaç kişinin sahip olduğu özel bir yetenek değil, birçok BT işinde gereken bir beceridir.',
-        image: require('../images/code.jpg'), // Resmin yolu
-    },
-    {
-        id: '2',
-        title: 'Algoritmalar',
-        content: 'İçerik 2...',
-        image: require('../images/algorithm.jpg'), // Resmin yolu
-    },
-    {
-        id: '3',
-        title: 'En iyi Kod Editörleri',
-        content: 'İçerik 3...',
-        image: require('../images/editor.jpg'), // Resmin yolu
-    },
-];
+const db = SQLite.openDatabase({ name: 'blog.db', location: 'default' });
 
 const App = () => {
-    const [posts, setPosts] = useState(initialPosts);
-    const [selectedPost, setSelectedPost] = useState(null);
+    const navigation = useNavigation();
+    const [data, setData] = useState([]);
+    const [isRefreshing, setisRefreshing] = useState(false);
 
+    useEffect(() => { handleRefresh(); }, []);
 
-    const closePost = () => {
-        setSelectedPost(null);
-    };
+    const handleRefresh = () => {
+        setisRefreshing(true);
+        fetch("https://hwasampleapi.firebaseio.com/chats.json")
+            .then((res) => res.json())
+            .then((json) => {
+                setData(json);
+                setisRefreshing(false);
+            })
+            .catch((err) => console.log(err));
+
+    }
+
 
     return (
         <SafeAreaView style={styles.container}>
+
             <Text style={styles.header}>MBlog </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <Chip icon={(require('../images/heart.png'))} style={{ width: 130, margin: 5, }}>Favorilerim</Chip>
                 <Chip icon={(require('../images/clock.png'))} style={{ width: 100, margin: 5 }}>Yeniler</Chip>
                 <Chip icon={(require('../images/star.png'))} style={{ width: 100, margin: 5 }}>Popüler</Chip>
             </View>
-            <ScrollView style={styles.postList}>
-                {posts.map((post) => (
-                    <TouchableOpacity
-                        key={post.id}
-                        style={styles.postItem}
-                        onPress={() => setSelectedPost(post)}
-                    >
-                        <Image source={post.image} style={styles.postImage} />
-                        <Text style={styles.postTitle}>{post.title}</Text>
-                        <Text style={styles.postDescription}>{post.content}</Text>
-                    </TouchableOpacity>
-                ))}
-            </ScrollView>
-            <Modal
+            <GestureHandlerRootView>
+                <FlatList
+                    refreshControl={<RefreshControl onRefresh={() => handleRefresh()} refreshing={isRefreshing} />}
+                    data={data}
+                    ItemSeparatorComponent={() => (<View style={{ backgroundColor: "#ccc", height: 1, marginStart: 50 + 24 }}></View>)}
+
+
+                    keyExtractor={(item) => item.name}
+                    renderItem={({ item }) =>
+                    (<TouchableOpacity onPress={() => navigation.navigate('Detay', { item })} style={{ padding: 12, flexDirection: 'row', alignItems: 'center' }}>
+                        <Image source={{ uri: item.image, width: 50, height: 50 }} style={{ borderRadius: 50 }}
+                        />
+                        <View style={{ flex: 1, marginStart: 12 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={{ fontSize: 18 }}> {item.name} </Text>
+                                <Text style={{ color: "#999" }}>{item.date} </Text>
+                            </View>
+
+                        </View>
+
+                    </TouchableOpacity>)
+
+                    } />
+            </GestureHandlerRootView>
+
+            {/* <Modal
                 animationType="slide"
                 transparent={false}
                 visible={selectedPost !== null}
@@ -64,7 +73,7 @@ const App = () => {
                     <Text style={styles.selectedPostContent}>{selectedPost?.content}</Text>
                     <Button title="Kapat" onPress={closePost} />
                 </SafeAreaView>
-            </Modal>
+            </Modal> */}
 
         </SafeAreaView>
     );
@@ -139,8 +148,11 @@ const styles = StyleSheet.create({
     },
     selectedPostContent: {
         fontSize: 16,
-        width: '90%',
-        alignSelf: 'center'
+        flex: 1,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        alignItems: 'center',
+
     },
 });
 

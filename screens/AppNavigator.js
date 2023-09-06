@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Login from './Login'
 import Navigation from './Navigation'
 import Home from './Home'
+import Detay from './Detay'
 const Stack = createNativeStackNavigator();
 export default function AppNavigator() {
     return (
@@ -13,6 +14,7 @@ export default function AppNavigator() {
             <Stack.Navigator initialRouteName='Home'>
                 <Stack.Screen name='Login' component={Login} options={{ headerShown: false, animationTypeForReplace: 'push', animation: 'slide_from_right' }} ></Stack.Screen>
                 <Stack.Screen name='Navigation' component={Navigation} options={{ headerShown: false, animationTypeForReplace: 'push', animation: 'slide_from_right' }} ></Stack.Screen>
+                <Stack.Screen name='Detay' component={Detay}  ></Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
 
