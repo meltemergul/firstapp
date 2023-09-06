@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1001553489621",
+    "project_id": "tutorial-rn-f07b4",
+    "storage_bucket": "tutorial-rn-f07b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001553489621:android:8bd08b9a5213c23cf6fc5c",
+        "android_client_info": {
+          "package_name": "com.firstapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001553489621-nbc2s7a0mm844fuct869jsv6scee6oaf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPEnxgLwbuxNQnFMocxMRX8c0rMYL5LHc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1001553489621-nbc2s7a0mm844fuct869jsv6scee6oaf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1001553489621-e54kbc1ibe14jj1hahauoav5vja3hj1h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.firstapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
